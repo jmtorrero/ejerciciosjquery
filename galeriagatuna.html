@@ -1,0 +1,117 @@
+<html>
+
+<body>
+	<style>
+		#gallery{
+			width: 640px;
+			height: 400px;
+			overflow: hidden;
+			position: relative;
+		}
+		#gallery > img{
+			top: 0;
+			left: -640px;
+			position: absolute;
+		}
+		#gallery > img:first-child{
+			left: 0px;
+		}
+	</style>
+	<div id="gallery">
+		<img class="activa" src="http://lorempixel.com/640/400/cats/1/">
+		<img src="http://lorempixel.com/640/400/cats/5/">
+		<img src="http://lorempixel.com/640/400/cats/3/">
+		<img src="http://lorempixel.com/640/400/cats/4/">
+	</div>
+	<span id="btnAnterior">Anterior | </span> 
+	<span id="btnSiguiente">Siguiente | </span>
+	<span id="btnPlay">Play | </span>
+	<span id="btnPause">Pause</span>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+	$('#btnAnterior').on('click',function(ev){
+		irAnterior();
+	});
+	$('#btnSiguiente').on('click',function(ev){
+		irSiguiente();
+	});
+
+	function irSiguiente(){
+		var activa = $('.activa');
+		var siguiente = activa.next();
+		if(siguiente.length != 0){
+			activa.stop(true,false);
+			siguiente.stop(true,false);
+			activa.animate({
+				'left' : '640px'
+			},700);
+			siguiente.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			siguiente.addClass('activa');
+		}
+		else
+		{
+			var primera = $('#gallery > img:first-child');
+			$('#gallery > img').animate({
+				'left' : '-640px'
+			},700);
+			primera.stop(true,false);
+			primera.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			primera.addClass('activa');
+		}
+	}
+	function irAnterior(){
+		var activa = $('.activa');
+		var anterior = activa.prev();
+		if(anterior.length != 0){
+			activa.stop(true,false);
+			anterior.stop(true,false);
+			activa.animate({
+				'left' : '-640px'
+			},700);
+			anterior.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			anterior.addClass('activa');
+		}else{
+			var ultima = $('#gallery > img:last-child');
+			$('#gallery > img').animate({
+				'left' : '640px'
+			},700);
+			ultima.stop(true,false);
+			ultima.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			ultima.addClass('activa');
+		}
+	}
+
+	var miintervalo;
+
+	function play() {
+		clearInterval(miintervalo);
+		irSiguiente();
+		miintervalo = setInterval(function(){
+		irSiguiente();
+		},3000);
+	}
+
+	function pause() {
+		clearInterval(miintervalo);
+	}
+	$('#btnPlay').on('click', function (ev) {
+		play();
+	});
+	$('#btnPause').on('click', function (ev) {
+		pause();
+	});
+</script>
+</body>
+</html>
