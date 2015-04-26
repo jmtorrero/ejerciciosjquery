@@ -1,0 +1,968 @@
+<!-- COMIENZO EJERCICIO 1
+
+Crear una página HTML con 1 menú de 4 elementos ul>li
+Crear un programa JS que modifique los elementos li, al poner el ratón encima tienen que moverse 30px hacia abajo.
+
+
+Sobre la página Web anterior añadir 4 div's con un contenido cualquiera y un color de fondo distinto y mantenerlos ocultos.
+Sobre la página Web anterior hacer que al pulsar sobre los elementos del menú se muestre el div que corresponda.
+
+Sobre el último div hacer que el color de fondo vaya cambiando progresivamente. -->
+
+<html>
+<head>
+	<style>
+		ul > li {
+			display: inline;
+		}
+		.seleccionado{
+			position: relative;
+			top: 30px;
+		}
+		div {
+			margin-top: 30px;
+			height: 300px;
+			border: 1px solid #000;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<ul>
+		<li id="ap1">Ap1</li>
+		<li id="ap2">Ap2</li>
+		<li id="ap3">Ap3</li>
+		<li id="ap4">Ap4</li>
+	</ul>
+
+	<div id="divap1" style="background:#f00">Contenido ap1</div>
+	<div id="divap2" style="background:#0f0">Contenido ap2</div>
+	<div id="divap3" style="background:#00f">Contenido ap3</div>
+	<div id="divap4" style="background:#ff0">Contenido ap4</div>
+</body>
+</html>
+<script>
+	var lis = document.getElementsByTagName('li');
+	for(var i = lis.length -1 ; i >= 0; i--){
+		lis[i].onmouseover = function(ev){
+			esSeleccionado(this);
+		}
+	}
+
+	function esSeleccionado(elm){
+		elm.className = elm.className + ' seleccionado';
+	}
+
+	document.getElementById('ap1').onclick = function(ev){
+		mostrarDiv('divap1');
+	}
+	document.getElementById('ap2').onclick = function(ev){
+		mostrarDiv('divap2');
+	}
+	document.getElementById('ap3').onclick = function(ev){
+		mostrarDiv('divap3');
+	}
+	document.getElementById('ap4').onclick = function(ev){
+		mostrarDiv('divap4');
+	}
+
+	function mostrarDiv(elmName){
+		var divs = document.getElementsByTagName('div');
+		for(var i = divs.length -1 ; i >= 0; i--){
+			divs[i].style.display = 'none';
+		}
+		var elm = document.getElementById(elmName);
+		elm.style.display = 'block';
+	}
+
+/*
+	for(var r=0;r < 256; r++){
+		for(var g=0;g < 256; g++){
+			for(var b=0;b < 256; b++){
+				document.getElementById('divap4').style.background = 'rgb('+r+','+g+','+b+')';
+			}
+		}
+	}
+*/
+
+</script>
+
+<!-- FIN EJERCICIO 1 -->
+
+<!-- COMIENZO EJERCICIO 2
+
+Se cambia una clase de un elemento a otro de la lista al hacer click sobre él -->
+
+
+<html>
+
+<head>
+<style>
+	.seleccionado {
+		font-weight: bold;
+	}
+</style>
+</head>
+<body>
+<ul id="menu">
+	<li id="m1" class="seleccionado"></li>
+	<li id="m2"></li>
+</ul>
+
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+	var mielemento = $('#m2');
+
+	mielemento.text('elemento 2');
+
+	$('#m1').html('<i>elemento 1</i>');
+
+	function activar2(){
+		$('#m1').removeClass('seleccionado');
+		$('#m2').addClass('seleccionado');
+	}
+	function activar1(){
+		$('#m2').removeClass('seleccionado');
+		$('#m1').addClass('seleccionado');
+	}
+
+	$('#m1').click(function(ev){
+		activar1();		
+	});
+	$('#m2').on('click',function(ev){
+		activar2();
+	});
+
+	//console.log($('#menu > li'));
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 2 -->
+
+
+<!-- COMIENZO EJERCICIO 3
+
+Ejercicio del helper -->
+
+<html>
+<body>
+	<style>
+		.helper{
+			width: 20px;
+			height: 20px;
+			border-radius: 20px;
+			background: #00f;
+			text-align: center;
+
+		}
+		#helperdiv{
+			position: absolute;
+			background: #ff0;
+			padding: 5px;
+		}
+	</style>
+	<div class="helper" data-text="texto a mostrar">?</div>
+	<div class="helper" data-text="texxto 3">?</div>
+	<div class="helper" data-text="texto 436746 mostrar">?</div>
+<script src="jquery-2.1.3.min.js"></script>
+<script>
+	$('.helper').on('mouseover',function(ev){
+		var texto = $(this).data('text');
+
+		var nuevodiv = $('<div></div>');
+		nuevodiv.attr('id','helperdiv');
+		nuevodiv.text(texto);
+
+		//darle posicion
+		nuevodiv.css('top',ev.pageY+2+'px');
+		nuevodiv.css('left',ev.pageX+2+'px');
+
+		$('body').append(nuevodiv);
+	});
+	$('.helper').on('mousemove',function(ev){
+		
+		$('#helperdiv').css('top',ev.pageY+2+'px');
+		$('#helperdiv').css('left',ev.pageX+2+'px');
+	});
+	$('.helper').on('mouseout',function(ev){
+		$('#helperdiv').remove();
+	});
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 3 -->
+
+
+<!-- COMIENZO EJERCICIO 4
+
+Ejercicio del menu desplegable -->
+
+
+<html>
+<body>
+	<style>
+	body > ul > li{
+		display: inline;
+	}
+	ul > li > ul{
+		position: fixed;
+		list-style: none;
+		display: none;
+	}
+	</style>
+	<ul>
+		<li>Inicio</li>
+		<li>Productos
+			<ul>
+				<li>Producto1</li>
+				<li>Producto2</li>
+			</ul>
+		</li>
+		<li>Contacto
+			<ul>
+				<li>Telefono</li>
+				<li>Direccion</li>
+			</ul>
+		</li>
+	</ul>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script>
+		$('body > ul > li').on('mouseover',function(ev){
+			$(this).find('ul').fadeIn();
+		});
+
+		$('body > ul > li').on('mouseout',function(ev){
+			$(this).find('ul').fadeOut();
+		});
+	</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 4 -->
+
+<!-- COMIENZO EJERCICIO 5
+
+Ejercicio del juego de Atrapame -->
+
+<html>
+<body>
+<style>
+
+	span{
+		transition: all 1s;
+		background: #f00;
+		cursor: not-allowed;
+		position: absolute;
+		top: 300px;
+		left: 500px;
+	}
+</style>
+<span>Atrapame</span>
+<script src="jquery-2.1.3.min.js"></script>
+<script>
+	function aleatorioDesdeHasta(min,max){
+		var numero = Math.random();
+		var res = min+numero*(max-min);
+		res = Math.round(res);
+		if(res == 0){
+			res = aleatorioDesdeHasta(min,max);
+		}
+		return res;
+	}
+
+	$('span').on('mouseover',function(ev){
+		var posicionactual = parseInt($(this).css('top'));
+		var valordetop = posicionactual+aleatorioDesdeHasta(-2,2)*50+'px';
+		$(this).css('top',valordetop);
+
+		var posicionactual = parseInt($(this).css('left'));
+		var valordeleft = posicionactual+aleatorioDesdeHasta(-2,2)*50+'px';
+		$(this).css('left',valordeleft);
+	});
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 5 -->
+
+<!-- COMIENZO EJERCICIO 6
+
+Ejercicio del menú que aparece y desaparece por el lateral -->
+
+<html>
+<body>
+<style>
+	html,body{
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+	#menu{
+		top: 0;
+		left: 0;
+		position: fixed;
+		height: 100%;
+		width: 0px;
+		background: rgba(30,30,30,.8);
+		color: #fff;
+		overflow: hidden;
+	}
+</style>
+<a href="#" id="mostrarMenu">mostrar menu</a>
+<h1>Titulo</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<!-- Crear un div que parezca un modal -->
+<div id="menu">
+	<ul>
+		<li>Elm1</li>
+		<li>Elm2</li>
+		<li>Elm3</li>
+	</ul>
+</div>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+		$('#mostrarMenu').on('click',function(ev){
+			$('#menu').animate({
+				'width' : '300px'
+			},1000);
+		});
+		$('#menu').on('click',function(ev){
+			$('#menu').animate({
+				'width' : '0px'
+			},1000);
+		});
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 6 -->
+
+<!-- COMIENZO EJERCICIO 7
+
+Primer ejemplo de ejercicio modal -->
+
+<html>
+<body>
+<style>
+	html,body{
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+	#modal{
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		background: rgba(0,0,0,.4);
+	}
+	#cerrar{
+		position: relative;
+		float: right;
+		top: -95px;
+		right: -95px;
+		width: 30px;
+		height: 30px;
+		border-radius: 30px;
+		background: #fff;
+		border: 1px solid #000;
+		text-align: center;
+		line-height: 30px;
+		cursor: pointer;
+	}
+	.redondeado{
+		text-align: center;
+		background: #fff;
+		padding: 80px;
+		margin: 40px;
+		border-radius: 20px;
+		min-height: 300px;
+		box-shadow: #333 2px 2px 2px 2px;
+	}
+</style>
+<h1>Titulo</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p><button id="abrirModal" style="display:none">Pulsar para abrir</button></p>
+<!-- Crear un div que parezca un modal -->
+<div id="modal">
+	<div class="redondeado">
+		<div id="cerrar">X</div>
+		<input type="text" value="Tu email"><br>
+		<button>Enviar</button>
+	</div>
+</div>
+<script src="jquery-2.1.3.min.js"></script>
+<script>
+	$('#cerrar').on('click',function(ev){
+		$('#modal').fadeOut(1000,function(){
+			$('#abrirModal').show(500);
+		});
+	});
+
+	$('#abrirModal').on('click',function(ev){
+		$('#modal').fadeIn(1000,function(){
+			$('#abrirModal').hide(200);
+		});
+	});
+
+</script>
+</body>
+</html>
+
+
+<!-- FIN EJERCICIO 7 -->
+
+<!-- COMIENZO EJERCICIO 8
+
+Segundo ejemplo de ejercicio modal -->
+
+<html>
+<body>
+<style>
+	html,body{
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+	#modal{
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		background: rgba(0,0,0,.4);
+	}
+	#cerrar{
+		position: relative;
+		float: right;
+		top: -95px;
+		right: -95px;
+		width: 30px;
+		height: 30px;
+		border-radius: 30px;
+		background: #fff;
+		border: 1px solid #000;
+		text-align: center;
+		line-height: 30px;
+		cursor: pointer;
+	}
+	.redondeado{
+		text-align: center;
+		background: #fff;
+		padding: 80px;
+		margin: 40px;
+		border-radius: 20px;
+		min-height: 300px;
+		box-shadow: #333 2px 2px 2px 2px;
+	}
+</style>
+<h1>Titulo</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+	tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+	consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+	cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+	proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p>
+	<button id="abrirModal">Generar error</button>
+	<button id="abrirModal2">Generar error2</button>
+</p>
+<!-- Crear un div que parezca un modal -->
+<div id="modal" style="display:none">
+	<div class="redondeado">
+		<div id="cerrar">X</div>
+		<p id="contenidoModal">Mensaje de alerta</p>
+	</div>
+</div>
+<script src="jquery-2.1.3.min.js"></script>
+<script>
+
+	$('#cerrar').on('click',function(ev){
+		$('#modal').fadeOut(1000,function(){
+			$('#abrirModal').show(500);
+			$('#abrirModal2').show(500);
+		});
+	});
+
+	$('#abrirModal').on('click',function(ev){
+		$('#contenidoModal').text('Mensaje de error 1');
+		$('#modal').fadeIn(1000,function(){
+			$('#abrirModal').hide(200);
+		});
+	});
+	$('#abrirModal2').on('click',function(ev){
+		$('#contenidoModal').text('Mensaje de error 2');
+		$('#modal').fadeIn(1000,function(){
+			$('#abrirModal2').hide(200);
+		});
+	});
+
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 8 -->
+
+<!-- COMIENZO EJERCICIO 9
+
+Ejercicio de Galeria de deportes -->
+
+<html>
+	<style>
+		#gallery{
+			width: 800px;
+			height: 600px;
+			overflow: hidden;
+		}
+		#gallery > img{
+			top: 0;
+			left: -800px;
+			position: absolute;
+		}
+		#gallery > img:first-child{
+			left: 0px;
+		}
+	</style>
+
+<body>
+	
+	<div id="gallery">
+		<img class="activa" src="http://lorempixel.com/800/600/sports/1">
+		<img src="http://lorempixel.com/800/600/sports/2">
+		<img src="http://lorempixel.com/800/600/sports/3">
+		<img src="http://lorempixel.com/800/600/sports/4">
+	</div>
+	<span id="btnAnterior" style="float:left">Anterior</span>
+	<span id="btnSiguiente" style="float:right">Siguiente</span>
+
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js">
+
+	</script>
+	<script>
+	$('#btnAnterior').on('click',function(ev){
+		irAnterior();
+	});
+	$('#btnSiguiente').on('click',function(ev){
+		irSiguiente();
+	});
+
+	function irSiguiente(){
+		var activa = $('.activa');
+		var siguiente = activa.next();
+		if(siguiente.length != 0){
+			activa.stop(true,false);
+			siguiente.stop(true,false);
+			activa.animate({
+				'left' : '800px'
+			},4000);
+			siguiente.animate({
+				'left' : '0px'
+			},4000);
+			activa.removeClass('activa');
+			siguiente.addClass('activa');
+		}
+		
+	}
+	function irAnterior(){
+		var activa = $('.activa');
+		var anterior = activa.prev();
+		//si en anterior no hay ningun elemento anterior.length == 0
+		//por el contrario, si en anterior tenemos un 
+		//elemento anterior.length != 0
+		if(anterior.length != 0){
+			activa.stop(true,false);
+			anterior.stop(true,false);
+			activa.animate({
+				'left' : '-800px'
+			},4000);
+			anterior.animate({
+				'left' : '0px'
+			},4000);
+			activa.removeClass('activa');
+			anterior.addClass('activa');
+		}
+	}
+	</script>
+</body>
+
+</html>
+
+<!-- FIN EJERCICIO 9 -->
+
+<!-- COMIENZO EJERCICIO 10
+
+Ejercicio de Galeria de gatitos -->
+
+<html>
+
+<body>
+	<style>
+		#gallery{
+			width: 640px;
+			height: 400px;
+			overflow: hidden;
+			position: relative;
+		}
+		#gallery > img{
+			top: 0;
+			left: -640px;
+			position: absolute;
+		}
+		#gallery > img:first-child{
+			left: 0px;
+		}
+	</style>
+	<div id="gallery">
+		<img class="activa" src="http://lorempixel.com/640/400/cats/1/">
+		<img src="http://lorempixel.com/640/400/cats/5/">
+		<img src="http://lorempixel.com/640/400/cats/3/">
+		<img src="http://lorempixel.com/640/400/cats/4/">
+	</div>
+	<span id="btnAnterior">Anterior | </span> 
+	<span id="btnSiguiente">Siguiente | </span>
+	<span id="btnPlay">Play | </span>
+	<span id="btnPause">Pause</span>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+	$('#btnAnterior').on('click',function(ev){
+		irAnterior();
+	});
+	$('#btnSiguiente').on('click',function(ev){
+		irSiguiente();
+	});
+
+	function irSiguiente(){
+		var activa = $('.activa');
+		var siguiente = activa.next();
+		if(siguiente.length != 0){
+			activa.stop(true,false);
+			siguiente.stop(true,false);
+			activa.animate({
+				'left' : '640px'
+			},700);
+			siguiente.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			siguiente.addClass('activa');
+		}
+		else
+		{
+			var primera = $('#gallery > img:first-child');
+			$('#gallery > img').animate({
+				'left' : '-640px'
+			},700);
+			primera.stop(true,false);
+			primera.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			primera.addClass('activa');
+		}
+	}
+	function irAnterior(){
+		var activa = $('.activa');
+		var anterior = activa.prev();
+		if(anterior.length != 0){
+			activa.stop(true,false);
+			anterior.stop(true,false);
+			activa.animate({
+				'left' : '-640px'
+			},700);
+			anterior.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			anterior.addClass('activa');
+		}else{
+			var ultima = $('#gallery > img:last-child');
+			$('#gallery > img').animate({
+				'left' : '640px'
+			},700);
+			ultima.stop(true,false);
+			ultima.animate({
+				'left' : '0px'
+			},700);
+			activa.removeClass('activa');
+			ultima.addClass('activa');
+		}
+	}
+
+	var miintervalo;
+
+	function play() {
+		clearInterval(miintervalo);
+		irSiguiente();
+		miintervalo = setInterval(function(){
+		irSiguiente();
+		},3000);
+	}
+
+	function pause() {
+		clearInterval(miintervalo);
+	}
+	$('#btnPlay').on('click', function (ev) {
+		play();
+	});
+	$('#btnPause').on('click', function (ev) {
+		pause();
+	});
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 10 -->
+
+<!-- COMIENZO EJERCICIO 11
+
+Ejercicio del menu desplegable mejorado -->
+
+<html>
+<body>
+	<style>
+	body > ul > li{
+		display: inline;
+	}
+	ul > li > ul{
+		position: fixed;
+		list-style: none;
+		display: none;
+	}
+	</style>
+	<ul>
+		<li>Inicio</li>
+		<li>Productos
+			<ul>
+				<li>Producto1</li>
+				<li>Producto2</li>
+			</ul>
+		</li>
+		<li>Contacto
+			<ul>
+				<li>Telefono</li>
+				<li>Direccion</li>
+			</ul></li>
+	</ul>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script>
+		$('body > ul > li').on('mouseover',function(ev){
+			$(this).find('ul').stop(true,false);
+			$(this).find('ul').fadeIn();
+		});
+
+		$('body > ul > li').on('mouseout',function(ev){
+			var t = $(this);
+			setTimeout(function(){
+				t.find('ul').fadeOut();
+			},1500);
+		});
+	</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 11 -->
+
+<!-- COMIENZO EJERCICIO 12
+
+Ejercicio de redireccionamiento -->
+
+Si no pulsa sobre el boton antes de 10s se le redireccionara<span id="cargando">.</span><br>
+<button id="btnvender">Te vendo mi alma</button>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+
+function anadirpuntos(){
+	var mispan = $('#cargando');
+	if(mispan.text().length > 3){
+		mispan.text('.');
+	}else{
+		mispan.text(mispan.text()+'.');
+	}
+}
+
+var miintervalo = setInterval(function(){
+	anadirpuntos();
+},350);
+
+var mitimeout = setTimeout(function(){
+	window.location = 'http://google.es/';
+},10000);
+
+$('#btnvender').on('click',function(){
+	clearTimeout(mitimeout);
+	clearInterval(miintervalo);
+})
+
+
+</script>
+
+<!-- FIN EJERCICIO 12 -->
+
+<!-- COMIENZO EJERCICIO 13
+
+Ejercicio de redireccionamiento bomba -->
+
+Si no pulsa sobre el boton antes de 10s se le redireccionara<span id="cargando">10000</span><br>
+<button id="btnvender">Te vendo mi alma</button>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+
+function anadirpuntos(){
+	var mispan = $('#cargando');
+	var tiempo = parseInt(mispan.text());
+	if(tiempo > 35){
+		mispan.text(tiempo-35);
+	}else{
+		mispan.text('Boom!!');
+	}
+}
+
+var miintervalo = setInterval(function(){
+	anadirpuntos();
+},35);
+
+var mitimeout = setTimeout(function(){
+	window.location = 'http://google.es/';
+},10000);
+
+$('#btnvender').on('click',function(){
+	clearTimeout(mitimeout);
+	clearInterval(miintervalo);
+})
+
+
+</script>
+
+<!-- FIN EJERCICIO 13 -->
+
+<!-- COMIENZO EJERCICIO 14
+
+Ejercicio de la cola de personas -->
+
+<html>
+<body>
+<ul id="cola">
+	<li>Persona 1</li>
+	<li>Persona 2</li>
+	<li>Persona 3</li>
+</ul>
+<button id="bappend">Anadir por el final</button>
+<button id="bprepend">Anadir por el principio</button>
+<button id="bafter">Anadir por detras</button>
+<button id="bbefore">Anadir por delante</button>
+<button id="bremove">Borrar</button>
+<button id="bempty">Vaciar lista</button>
+<button id="bmatar">Matar</button>
+
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+	var mielemento = $('<li>');
+	mielemento.text('Yo');
+
+	$('#bappend').on('click',function(ev){
+		$('#cola').append(mielemento);
+		//no usar variables globales, esto es un ejercicio de prueba
+	});
+	$('#bprepend').on('click',function(ev){
+		$('#cola').prepend(mielemento);
+	});
+	$('#bafter').on('click',function(ev){
+		$('#cola').after(mielemento);
+	});
+	$('#bbefore').on('click',function(ev){
+		$('#cola').before(mielemento);
+	});
+
+	$('#bremove').on('click',function(ev){
+		mielemento.remove();
+	});
+
+	$('#bempty').on('click',function(ev){
+		$('#cola').empty();
+	});
+
+	$('#bmatar').on('click',function(ev){
+		$('body').empty();
+	});
+	
+</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 14 -->
+
+<!-- COMIENZO EJERCICIO 15
+
+Ejercicio de formulario de ir añadiendo respuestas o quitando -->
+
+<html>
+<body>
+	<style>
+		input[type=text]{
+			width:100%;padding:5px;border-radius:4px
+		}
+	</style>
+	<form>
+		<h4>Pregunta</h4>
+		<input type="text" name="pregunta">
+		<fieldset id="contenedor">
+			<legend>Respuestas</legend>
+			<button type="button" id="addResponse">+</button><br>
+		</fieldset>
+		<input type="submit" value="Enviar">
+	</form>
+
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script>
+		$('#addResponse').on('click',function(ev){
+			var botoneliminar = $('<button type="button">-</button>');
+			botoneliminar.on('click',function(ev){
+				$(this).next().remove();
+				$(this).remove();
+			});
+			$('#contenedor').append(botoneliminar);
+
+			var inputrespuesta = $('<input type="text" name="respuesta[]">');
+			$('#contenedor').append(inputrespuesta);
+			inputrespuesta.focus();
+		});
+	</script>
+</body>
+</html>
+
+<!-- FIN EJERCICIO 15 -->
+
